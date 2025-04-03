@@ -41,58 +41,10 @@ class ControllerNode(Node):
             10,
         )
 
-        # Create a subscriber to the imu data
-        self.imu_sub = self.create_subscription(
-            Imu, "imu", self.robot_controller.robot.imu_callback, 10
-        )
-
-        # Crerate a subscriber to the cmd_vel
-        self.joystick_sub = self.create_subscription(
-            Joy, "joy", self.joystick_callback, 10
-        )
-
-        # Create a subscriber to the key_info
-        self.key_info_sub = self.create_subscription(
-            KeyInfo, "key_info", self.key_info_callback, 10
-        )
-
         # Create a publisher to the joint commands
         self.joint_cmd_pub = self.create_publisher(JointState, "joint_cmd", 10)
 
         # Internal variables
-        
-
-    def key_info_callback(self, msg: KeyInfo):
-        """
-        Callback function for the key_info subscriber.
-
-        Args:
-            msg (KeyInfo): the message
-        """
-        key_value = msg.key_value
-        key_event = msg.key_event
-        if key_value == "START" and key_event == "KEY_HOLDING_3S":
-            self.robot_controller.push_event(RobotEvent.START_BUTTON_3S)
-        elif key_value == "BACK" and key_event == "KEY_PRESSED":
-            self.robot_controller.push_event(RobotEvent.BACK_BUTTON_PRESSED)
-
-    def joystick_callback(self, msg: Joy):
-        """
-        Callback function for the cmd_vel subscriber.
-        
-        Args:
-            msg (Twist): the message
-        """
-        axes = msg.axes
-
-        left_x = -axes[0]
-        left_y = axes[1]
-        right_x = axes[3]
-        v_y = left_x * self.robot_controller.config.max_linear_velocity_y
-        v_x = left_y * self.robot_controller.config.max_linear_velocity_x
-        w = right_x * self.robot_controller.config.max_angular_velocity
-
-        self.robot_controller.set_command(np.array([v_x, v_y, w]))
 
     def timer_callback(self):
         self.robot_controller.push_event(RobotEvent.TIMER_EVENT)

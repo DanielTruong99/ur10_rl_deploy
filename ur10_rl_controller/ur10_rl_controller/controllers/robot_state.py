@@ -20,3 +20,4 @@ class BaseState(object):
         self.vB = np.zeros(3)
         self.wB = np.zeros(3)
         self.orientation = np.zeros(4)
+        self.position = np.zeros(3)

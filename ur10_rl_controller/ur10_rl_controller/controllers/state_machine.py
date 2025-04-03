@@ -66,27 +66,27 @@ class RobotFSM(state_machine.FSM):
 
         if event is RobotEvent.ENTRY_SIG:         
             # Start the robot controller to move to default joint position
-            self.controller.start_moving_to_default(2.0)
+            # self.controller.start_moving_to_default(2.0)
             rclpy.logging._root_logger.info("Robot in configuration state")
             status = state_machine.Status.HANDLED_STATUS
 
         elif event is RobotEvent.TIMER_EVENT:
-            if self.controller.is_start_moving_to_default():
-                # Robot move to its default joint position
-                self.controller.move_to_default_position("kneel")
+            # if self.controller.is_start_moving_to_default():
+            #     # Robot move to its default joint position
+            #     self.controller.move_to_default_position("kneel")
 
-                # Check if the robot is done moving to default position
-                # Start the timer for waiting 2 seconds
-                if self.controller.is_done_moving_to_default_position():
-                    rclpy.logging._root_logger.info("Robot is done moving to kneeling position")
-                    rclpy.logging._root_logger.info("Robot is waiting for 2 seconds ...")
-                    self.controller._is_done_moving_to_default_position = False
-                    self.controller.node_handler.start_timer()
+            #     # Check if the robot is done moving to default position
+            #     # Start the timer for waiting 2 seconds
+            #     if self.controller.is_done_moving_to_default_position():
+            #         rclpy.logging._root_logger.info("Robot is done moving to kneeling position")
+            #         rclpy.logging._root_logger.info("Robot is waiting for 2 seconds ...")
+            #         self.controller._is_done_moving_to_default_position = False
+            #         self.controller.node_handler.start_timer()
             status = state_machine.Status.HANDLED_STATUS
 
         elif event is RobotEvent.TIME_OUT_2S:
             # Reset the timer after moving to default position
-            self.controller.node_handler.reset_timer()
+            # self.controller.node_handler.reset_timer()
             self.transition_to(self.running_state)
             status = state_machine.Status.TRAN_STATUS
 
@@ -162,17 +162,17 @@ class RobotFSM(state_machine.FSM):
             status = state_machine.Status.HANDLED_STATUS
 
         elif event is RobotEvent.BACK_BUTTON_PRESSED:
-            self.controller.start_moving_to_default(5.0)
+            # self.controller.start_moving_to_default(5.0)
             status = state_machine.Status.HANDLED_STATUS
 
         elif event is RobotEvent.TIMER_EVENT:
-            if self.controller.is_start_moving_to_default():
+            # if self.controller.is_start_moving_to_default():
                 # Robot move to its default joint position
-                self.controller.move_to_default_position("stand")
+                # self.controller.move_to_default_position("stand")
 
                 # Check if the robot is done moving to default position
-                if self.controller.is_done_moving_to_default_position():
-                    rclpy.logging._root_logger.info("Robot is done moving to standing position")
+                # if self.controller.is_done_moving_to_default_position():
+                #     rclpy.logging._root_logger.info("Robot is done moving to standing position")
             status = state_machine.Status.HANDLED_STATUS
 
         elif event is RobotEvent.START_BUTTON_3S:

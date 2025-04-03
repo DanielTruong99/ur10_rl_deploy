@@ -135,37 +135,37 @@ class Robot(object):
             self.callback_flags["joint_states_callback"] = True
             
 
-    def imu_callback(self, msg: Imu) -> None:
-        """
-        Callback for the ros imu subscriber.
+    # def imu_callback(self, msg: Imu) -> None:
+    #     """
+    #     Callback for the ros imu subscriber.
 
-        Args:
-            msg (Imu): message from the imu topic
-        """
-        # Cache the orientation, angular velocity
-        # Temporarily store the projected gravity vector
-        # orientation = np.array(
-        #     [msg.orientation.w, msg.orientation.x, msg.orientation.y, msg.orientation.z]
-        # )
-        orientation = np.array(
-            [msg.orientation.x, msg.orientation.y, msg.orientation.z]
-        )
-        angular_velocity = np.array(
-            [msg.angular_velocity.x, msg.angular_velocity.y, msg.angular_velocity.z]
-        )
+    #     Args:
+    #         msg (Imu): message from the imu topic
+    #     """
+    #     # Cache the orientation, angular velocity
+    #     # Temporarily store the projected gravity vector
+    #     # orientation = np.array(
+    #     #     [msg.orientation.w, msg.orientation.x, msg.orientation.y, msg.orientation.z]
+    #     # )
+    #     orientation = np.array(
+    #         [msg.orientation.x, msg.orientation.y, msg.orientation.z]
+    #     )
+    #     angular_velocity = np.array(
+    #         [msg.angular_velocity.x, msg.angular_velocity.y, msg.angular_velocity.z]
+    #     )
 
-        # Check is finite values and update the base states
-        self.base_state.orientation = (
-            orientation
-            if np.all(np.isfinite(orientation))
-            else self.base_state.orientation
-        )
-        self.base_state.wB = (
-            angular_velocity
-            if np.all(np.isfinite(angular_velocity))
-            else self.base_state.wB
-        )
+    #     # Check is finite values and update the base states
+    #     self.base_state.orientation = (
+    #         orientation
+    #         if np.all(np.isfinite(orientation))
+    #         else self.base_state.orientation
+    #     )
+    #     self.base_state.wB = (
+    #         angular_velocity
+    #         if np.all(np.isfinite(angular_velocity))
+    #         else self.base_state.wB
+    #     )
 
-        # Set the callback flag to True
-        if self.callback_flags["imu_callback"] is False:
-            self.callback_flags["imu_callback"] = True
+    #     # Set the callback flag to True
+    #     if self.callback_flags["imu_callback"] is False:
+    #         self.callback_flags["imu_callback"] = True
