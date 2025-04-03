@@ -1,0 +1,1 @@
+Dependencies: torch torchvision numpy pyyaml scipy
