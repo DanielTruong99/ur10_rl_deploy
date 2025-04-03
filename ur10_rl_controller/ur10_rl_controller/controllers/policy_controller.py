@@ -113,26 +113,16 @@ class PolicyController(object):
         Compute the observation from the robot state and the previous action.
 
         Args:
-            command (np.ndarray): the action command (v_x, v_y, w_z)
+            command (np.ndarray): the action command (x, y, z, qw, qx, qy, qz)
 
         Returns:
-            np.ndarray: the observation [w, projected_g, command, q_rel, q_dot, previous_action, phase]
+            np.ndarray: the observation [q, qd, command, action]
         """
         observation = np.zeros(self.config.observation_dim)
-        
-        period = 0.8
-        offset = 0.5
-        phase = (self._policy_counter * self._control_dt) % period / period
-        sin_phase = np.sin(2 * np.pi * phase)
-        cos_phase = np.cos(2 * np.pi * phase)
-
         num_actions = self.config.action_dim
-        observation[:3] = self.robot.wB
-        observation[3:6] = self.robot.projected_g
-        observation[6:9] = command
-        observation[9 : 9 + num_actions] = self.robot.joint_positions - self.config.default_joint_positions
-        observation[9 + num_actions : 9 + 2 * num_actions] = self.robot.joint_velocities
-        observation[9 + 2 * num_actions : 9 + 3 * num_actions] = self._previous_action
-        observation[9 + 3 * num_actions] = sin_phase
-        observation[9 + 3 * num_actions + 1] = cos_phase
+        observation[:num_actions] = self.robot.leg_states.position - self.config.default_joint_positions
+        observation[num_actions : 2 * num_actions] = self.robot.leg_states.velocity
+        observation[2 * num_actions : 2 * num_actions + 7] = command
+        observation[2 * num_actions + 7 : 3 * num_actions + 7] = self._previous_action
+
         return observation
