@@ -1,0 +1,1 @@
+add_library(finite_state_machine STATIC fsm.cpp fsm.hpp)
